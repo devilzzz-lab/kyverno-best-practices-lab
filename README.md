@@ -16,7 +16,14 @@ kyverno-best-practices-lab/
 │   └── kyverno-architecture.md      # How Kyverno works internally
 ├── setup/
 │   ├── 01-cluster-setup.md          # Create the local KIND cluster
-│   └── 02-kyverno-install.md        # Install Kyverno via Helm
+│   ├── 02-kyverno-install.md        # Install Kyverno via Helm
+│   └── 03-argocd-install.md         # Install ArgoCD + connect this repo
+├── argocd/
+│   └── kyverno-policies-app.yaml    # ArgoCD Application (watches policies/)
+├── policies/                        # Single source of truth ArgoCD auto-syncs
+│   ├── 01-require-resource-limits.yaml
+│   ├── 02-disallow-latest-tag.yaml
+│   └── ...
 ├── task-01-require-resource-limits/
 ├── task-02-disallow-latest-tag/
 ├── task-03-require-run-as-non-root/
@@ -29,6 +36,16 @@ kyverno-best-practices-lab/
 └── task-10-image-signature-verification/
 ```
 
+## GitOps flow (ArgoCD)
+
+Every policy in `policies/` is auto-applied to the cluster by ArgoCD whenever you `git push`:
+
+```
+edit policy in policies/  →  git push  →  ArgoCD detects change  →  auto-applies to cluster
+```
+
+See [`policies/README.md`](policies/README.md) for how the folder is organized, and [`setup/03-argocd-install.md`](setup/03-argocd-install.md) to set it up.
+
 Each `task-NN-*` folder contains:
 - `README.md` — what the policy does and why it matters
 - `setup.md` — commands to apply the policy
@@ -39,7 +56,8 @@ Each `task-NN-*` folder contains:
 
 1. Follow [`setup/01-cluster-setup.md`](setup/01-cluster-setup.md) to create the KIND cluster.
 2. Follow [`setup/02-kyverno-install.md`](setup/02-kyverno-install.md) to install Kyverno.
-3. Work through `task-01` → `task-10` in order — they go from simple validation rules up to advanced image signature verification.
+3. Follow [`setup/03-argocd-install.md`](setup/03-argocd-install.md) to install ArgoCD and connect this repo — from this point on, anything you push into `policies/` is auto-applied.
+4. Work through `task-01` → `task-10` in order — they go from simple validation rules up to advanced image signature verification. Each task's `demo.md` walks you through manual testing; once you're happy with a policy, copy it into `policies/` so ArgoCD picks it up.
 
 ## Task index
 

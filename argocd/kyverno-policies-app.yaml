@@ -1,0 +1,24 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kyverno-policies
+  namespace: argocd
+spec:
+  project: default
+
+  source:
+    # Replace with your actual GitHub repo URL after you push it
+    repoURL: https://github.com/<your-username>/kyverno-best-practices-lab.git
+    targetRevision: main
+    path: policies
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: default
+
+  syncPolicy:
+    automated:
+      prune: true      # remove cluster resources if the matching yaml is deleted from git
+      selfHeal: true    # revert manual kubectl edits back to match git
+    syncOptions:
+      - CreateNamespace=true
