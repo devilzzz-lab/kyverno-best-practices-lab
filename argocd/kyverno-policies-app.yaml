@@ -8,7 +8,7 @@ spec:
 
   source:
     # Replace with your actual GitHub repo URL after you push it
-    repoURL: https://github.com/devilzzz-lab/kyverno-best-practices-lab.git
+    repoURL: https://github.com/<your-username>/kyverno-best-practices-lab.git
     targetRevision: main
     path: policies
 

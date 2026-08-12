@@ -1,6 +1,6 @@
 # Kyverno Best Practices Lab
 
-Hands-on lab covering **10 real-world Kyverno policies**, built and tested on a local KIND cluster. Each task is self-contained: what the policy does, why it matters, how to set it up, and how to prove it works.
+Hands-on lab covering **10 real-world Kyverno policies**, built and tested on a local KIND cluster, with an optional GitOps (ArgoCD) auto-deployment flow.
 
 ## Why Kyverno
 
@@ -8,56 +8,35 @@ Kyverno is a Kubernetes-native policy engine. Unlike OPA/Gatekeeper (which requi
 
 See [`docs/kyverno-architecture.md`](docs/kyverno-architecture.md) for the full architecture breakdown.
 
-## Repo structure
+---
 
-```
-kyverno-best-practices-lab/
-├── docs/
-│   └── kyverno-architecture.md      # How Kyverno works internally
-├── setup/
-│   ├── 01-cluster-setup.md          # Create the local KIND cluster
-│   ├── 02-kyverno-install.md        # Install Kyverno via Helm
-│   └── 03-argocd-install.md         # Install ArgoCD + connect this repo
-├── argocd/
-│   └── kyverno-policies-app.yaml    # ArgoCD Application (watches policies/)
-├── policies/                        # Single source of truth ArgoCD auto-syncs
-│   ├── 01-require-resource-limits.yaml
-│   ├── 02-disallow-latest-tag.yaml
-│   └── ...
-├── task-01-require-resource-limits/
-├── task-02-disallow-latest-tag/
-├── task-03-require-run-as-non-root/
-├── task-04-disallow-privileged-containers/
-├── task-05-require-labels/
-├── task-06-auto-add-labels-mutate/
-├── task-07-restrict-image-registries/
-├── task-08-generate-default-networkpolicy/
-├── task-09-require-probes/
-└── task-10-image-signature-verification/
-```
+## Two ways to use this repo
 
-## GitOps flow (ArgoCD)
+### Path A — I want ALL policies live on my cluster (GitOps)
 
-Every policy in `policies/` is auto-applied to the cluster by ArgoCD whenever you `git push`:
+Use this if you just want every policy in `policies/` enforced on your cluster automatically, kept in sync with Git.
 
-```
-edit policy in policies/  →  git push  →  ArgoCD detects change  →  auto-applies to cluster
-```
+1. [`setup/01-cluster-setup.md`](setup/01-cluster-setup.md) — create the KIND cluster
+2. [`setup/02-kyverno-install.md`](setup/02-kyverno-install.md) — install Kyverno
+3. [`setup/03-argocd-install.md`](setup/03-argocd-install.md) — install ArgoCD and connect this repo
+4. [`setup/04-argocd-testing.md`](setup/04-argocd-testing.md) — verify the Git → cluster sync actually works (valid push, deleted push, broken push)
 
-See [`policies/README.md`](policies/README.md) for how the folder is organized, and [`setup/03-argocd-install.md`](setup/03-argocd-install.md) to set it up.
+From then on: edit/add a file in `policies/`, `git push`, and ArgoCD applies it — no manual `kubectl apply`. See [`policies/README.md`](policies/README.md) for how that folder works.
 
-Each `task-NN-*` folder contains:
-- `README.md` — what the policy does and why it matters
-- `setup.md` — commands to apply the policy
-- `demo.md` — commands to prove it works (pass/fail cases)
-- `policy.yaml` — the actual Kyverno policy
+### Path B — I want to learn how EACH policy works (manual)
 
-## Getting started
+Use this to study one policy at a time — apply it yourself, break it yourself, see exactly what Kyverno does.
 
-1. Follow [`setup/01-cluster-setup.md`](setup/01-cluster-setup.md) to create the KIND cluster.
-2. Follow [`setup/02-kyverno-install.md`](setup/02-kyverno-install.md) to install Kyverno.
-3. Follow [`setup/03-argocd-install.md`](setup/03-argocd-install.md) to install ArgoCD and connect this repo — from this point on, anything you push into `policies/` is auto-applied.
-4. Work through `task-01` → `task-10` in order — they go from simple validation rules up to advanced image signature verification. Each task's `demo.md` walks you through manual testing; once you're happy with a policy, copy it into `policies/` so ArgoCD picks it up.
+1. [`setup/01-cluster-setup.md`](setup/01-cluster-setup.md) — create the KIND cluster
+2. [`setup/02-kyverno-install.md`](setup/02-kyverno-install.md) — install Kyverno
+3. Skip ArgoCD entirely. Open any `task-NN-*/` folder from the [Task index](#task-index) below and work through its 3 files in order:
+   - `README.md` — what the policy does and why it matters
+   - `setup.md` — apply that one policy manually with `kubectl apply -f`
+   - `demo.md` — apply `bad-pod.yaml` (should be rejected) and `good-pod.yaml` (should succeed) to prove it
+
+Both paths can be used together — e.g. run Path A for a live cluster, and still read through `task-NN-*/README.md` files to actually understand each rule.
+
+---
 
 ## Task index
 
@@ -73,3 +52,41 @@ Each `task-NN-*` folder contains:
 | 08 | [Auto-generate default-deny NetworkPolicy](task-08-generate-default-networkpolicy/README.md) | generate | Network security |
 | 09 | [Require liveness/readiness probes](task-09-require-probes/README.md) | validate | Reliability |
 | 10 | [Verify image signatures (cosign)](task-10-image-signature-verification/README.md) | verifyImages | Supply chain security (advanced) |
+
+---
+
+## Repo structure
+
+```
+kyverno-best-practices-lab/
+├── docs/
+│   └── kyverno-architecture.md      # How Kyverno works internally
+├── setup/
+│   ├── 01-cluster-setup.md          # Create the local KIND cluster
+│   ├── 02-kyverno-install.md        # Install Kyverno via Helm
+│   ├── 03-argocd-install.md         # Install ArgoCD + connect this repo
+│   └── 04-argocd-testing.md         # Verify GitOps sync works
+├── argocd/
+│   └── kyverno-policies-app.yaml    # ArgoCD Application (watches policies/)
+├── policies/                        # Single source of truth ArgoCD auto-syncs (Path A)
+│   ├── README.md
+│   ├── 01-require-resource-limits.yaml
+│   ├── 02-disallow-latest-tag.yaml
+│   └── ...
+├── task-01-require-resource-limits/ # Manual learning folders (Path B)
+│   ├── README.md
+│   ├── setup.md
+│   ├── demo.md
+│   ├── policy.yaml
+│   ├── bad-pod.yaml
+│   └── good-pod.yaml
+├── task-02-disallow-latest-tag/
+├── task-03-require-run-as-non-root/
+├── task-04-disallow-privileged-containers/
+├── task-05-require-labels/
+├── task-06-auto-add-labels-mutate/
+├── task-07-restrict-image-registries/
+├── task-08-generate-default-networkpolicy/
+├── task-09-require-probes/
+└── task-10-image-signature-verification/
+```
