@@ -45,13 +45,13 @@ Each `task-NN-*` folder contains:
 
 | # | Task | Rule Type | Category |
 |---|------|-----------|----------|
-| 01 | Require resource requests/limits | validate | Reliability |
-| 02 | Disallow `:latest` image tag | validate | Supply chain hygiene |
-| 03 | Require `runAsNonRoot` | validate | Pod security |
-| 04 | Disallow privileged containers | validate | Pod security |
-| 05 | Require standard labels | validate | Governance |
-| 06 | Auto-inject default labels | mutate | Automation |
-| 07 | Restrict allowed image registries | validate | Supply chain security |
-| 08 | Auto-generate default-deny NetworkPolicy | generate | Network security |
-| 09 | Require liveness/readiness probes | validate | Reliability |
-| 10 | Verify image signatures (cosign) | verifyImages | Supply chain security (advanced) |
+| 01 | [Require resource requests/limits](task-01-require-resource-limits/README.md) | validate | Reliability |
+| 02 | [Disallow `:latest` image tag](task-02-disallow-latest-tag/README.md) | validate | Supply chain hygiene |
+| 03 | [Require `runAsNonRoot`](task-03-require-run-as-non-root/README.md) | validate | Pod security |
+| 04 | [Disallow privileged containers](task-04-disallow-privileged-containers/README.md) | validate | Pod security |
+| 05 | [Require standard labels](task-05-require-labels/README.md) | validate | Governance |
+| 06 | [Auto-inject default labels](task-06-auto-add-labels-mutate/README.md) | mutate | Automation |
+| 07 | [Restrict allowed image registries](task-07-restrict-image-registries/README.md) | validate | Supply chain security |
+| 08 | [Auto-generate default-deny NetworkPolicy](task-08-generate-default-networkpolicy/README.md) | generate | Network security |
+| 09 | [Require liveness/readiness probes](task-09-require-probes/README.md) | validate | Reliability |
+| 10 | [Verify image signatures (cosign)](task-10-image-signature-verification/README.md) | verifyImages | Supply chain security (advanced) |

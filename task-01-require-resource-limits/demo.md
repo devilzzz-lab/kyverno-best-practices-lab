@@ -9,7 +9,7 @@ kubectl run bad-pod --image=nginx
 Expected: the request is denied at admission time, with an error referencing `require-resource-limits`:
 
 ```
-Error from server: admission webhook "mutate.kyverno.svc-fail" denied the request:
+Error from server: admission webhook "validate.kyverno.svc-fail" denied the request:
 ...
 CPU and memory resource requests/limits are required on every container.
 ```
