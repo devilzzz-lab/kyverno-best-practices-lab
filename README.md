@@ -40,18 +40,24 @@ Both paths can be used together — e.g. run Path A for a live cluster, and stil
 
 ## Task index
 
-| # | Task | Rule Type | Category |
-|---|------|-----------|----------|
-| 01 | [Require resource requests/limits](task-01-require-resource-limits/README.md) | validate | Reliability |
-| 02 | [Disallow `:latest` image tag](task-02-disallow-latest-tag/README.md) | validate | Supply chain hygiene |
-| 03 | [Require `runAsNonRoot`](task-03-require-run-as-non-root/README.md) | validate | Pod security |
-| 04 | [Disallow privileged containers](task-04-disallow-privileged-containers/README.md) | validate | Pod security |
-| 05 | [Require standard labels](task-05-require-labels/README.md) | validate | Governance |
-| 06 | [Auto-inject default labels](task-06-auto-add-labels-mutate/README.md) | mutate | Automation |
-| 07 | [Restrict allowed image registries](task-07-restrict-image-registries/README.md) | validate | Supply chain security |
-| 08 | [Auto-generate default-deny NetworkPolicy](task-08-generate-default-networkpolicy/README.md) | generate | Network security |
-| 09 | [Require liveness/readiness probes](task-09-require-probes/README.md) | validate | Reliability |
-| 10 | [Verify image signatures (cosign)](task-10-image-signature-verification/README.md) | verifyImages | Supply chain security (advanced) |
+| # | Task | Rule Type | Mode |
+|---|------|-----------|------|
+| 01 | [Require resource requests/limits](task-01-require-resource-limits/README.md) | validate | Enforce |
+| 02 | [Disallow `:latest` image tag](task-02-disallow-latest-tag/README.md) | validate | Enforce |
+| 03 | [Require `runAsNonRoot`](task-03-require-run-as-non-root/README.md) | validate | Enforce |
+| 04 | [Disallow privileged containers](task-04-disallow-privileged-containers/README.md) | validate | Enforce |
+| 05 | [Require standard labels](task-05-require-labels-audit/README.md) | validate | Audit |
+| 06 | [Disallow hostPath volumes](task-06-disallow-hostpath-audit/README.md) | validate | Audit |
+| 07 | [Require readOnlyRootFilesystem](task-07-require-readonly-rootfs-audit/README.md) | validate | Audit |
+| 08 | [Disallow automountServiceAccountToken](task-08-disallow-automount-sa-token-audit/README.md) | validate | Audit |
+| 09 | [Auto-inject default labels](task-09-mutate-add-labels/README.md) | mutate | — |
+| 10 | [Auto-inject default resource limits](task-10-mutate-default-resources/README.md) | mutate | — |
+| 11 | [Auto-set imagePullPolicy](task-11-mutate-image-pull-policy/README.md) | mutate | — |
+| 12 | [Auto-generate default-deny NetworkPolicy](task-12-generate-networkpolicy/README.md) | generate | — |
+| 13 | [Auto-generate default ResourceQuota](task-13-generate-resourcequota/README.md) | generate | — |
+| 14 | [Auto-generate default ConfigMap](task-14-generate-configmap/README.md) | generate | — |
+| 15 | [Verify image signatures (cosign)](task-15-verify-images-enforce/README.md) | verifyImages | Enforce |
+| 16 | [Verify image signatures (cosign)](task-16-verify-images-audit/README.md) | verifyImages | Audit |
 
 ---
 
