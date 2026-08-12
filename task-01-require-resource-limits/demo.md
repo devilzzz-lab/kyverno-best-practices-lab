@@ -3,7 +3,7 @@
 ## Case 1 — Pod with NO resource limits (should be REJECTED)
 
 ```bash
-kubectl run bad-pod --image=nginx
+kubectl apply -f bad-pod.yaml
 ```
 
 Expected: the request is denied at admission time, with an error referencing `require-resource-limits`:
