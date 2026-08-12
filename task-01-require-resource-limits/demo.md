@@ -16,10 +16,9 @@ CPU and memory resource requests/limits are required on every container.
 
 ## Case 2 — Pod WITH resource limits (should SUCCEED)
 
+
 ```bash
-kubectl run good-pod --image=nginx \
-  --requests='cpu=100m,memory=128Mi' \
-  --limits='cpu=200m,memory=256Mi'
+kubectl apply -f good-pod.yaml
 ```
 
 Expected: pod is created normally.
@@ -39,5 +38,5 @@ You should see a `pass` entry for `good-pod` against `require-resource-limits`. 
 ## Cleanup
 
 ```bash
-kubectl delete pod good-pod --ignore-not-found
+kubectl delete -f good-pod.yaml --ignore-not-found
 ```
