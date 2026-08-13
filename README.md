@@ -58,6 +58,7 @@ Both paths can be used together — e.g. run Path A for a live cluster, and stil
 | 14 | [Auto-generate default ConfigMap](task-14-generate-configmap/README.md) | generate | — |
 | 15 | [Verify image signatures (cosign)](task-15-verify-images-enforce/README.md) | verifyImages | Enforce |
 | 16 | [Verify image signatures (cosign)](task-16-verify-images-audit/README.md) | verifyImages | Audit |
+| 17 | [hostPath exception by label](task-17-hostpath-exception-by-label/README.md) | validate | Enforce |
 
 ---
 

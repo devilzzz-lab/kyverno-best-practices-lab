@@ -1,0 +1,25 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: hostpath-exception-by-label
+spec:
+  validationFailureAction: Enforce
+  rules:
+    - name: block-hostpath-unless-allowed
+      match:
+        any:
+        - resources:
+            kinds:
+              - Pod
+      exclude:
+        any:
+        - resources:
+            selector:
+              matchLabels:
+                hostpath-access: allowed
+      validate:
+        message: "hostPath volumes are only allowed for Pods explicitly labeled 'hostpath-access: allowed'."
+        pattern:
+          spec:
+            =(volumes):
+              - X(hostPath): "null"

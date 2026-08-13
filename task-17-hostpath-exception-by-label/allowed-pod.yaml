@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: allowed-pod-etc-access
+  labels:
+    hostpath-access: allowed
+spec:
+  containers:
+    - name: log-agent
+      image: nginx:1.25
+      volumeMounts:
+        - name: etc-vol
+          mountPath: /host-etc
+          readOnly: true
+      resources:
+        requests:
+          cpu: 100m
+          memory: 128Mi
+        limits:
+          cpu: 200m
+          memory: 256Mi
+  volumes:
+    - name: etc-vol
+      hostPath:
+        path: /etc
+        type: Directory
