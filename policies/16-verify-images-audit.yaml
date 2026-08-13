@@ -15,6 +15,7 @@ spec:
       verifyImages:
         - imageReferences:
             - "ghcr.io/kyverno/test-verify-image:*"
+          mutateDigest: false
           attestors:
             - entries:
                 - keys:
