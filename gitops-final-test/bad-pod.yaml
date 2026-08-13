@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: bad-pod-all-policies
+  # no labels — violates require-labels-audit
+spec:
+  # no automountServiceAccountToken: false — violates disallow-automount-sa-token-audit
+  # no securityContext.runAsNonRoot — violates require-run-as-non-root
+  containers:
+    - name: nginx
+      image: nginx:latest   # violates disallow-latest-tag
+      securityContext:
+        privileged: true    # violates disallow-privileged-containers
+        # no readOnlyRootFilesystem — violates require-readonly-rootfs-audit
+      # no resources block at all — violates require-resource-limits
+      volumeMounts:
+        - name: host-vol
+          mountPath: /host-etc
+  volumes:
+    - name: host-vol
+      hostPath:              # violates disallow-hostpath-audit AND hostpath-exception-by-label
+        path: /etc
+        type: Directory

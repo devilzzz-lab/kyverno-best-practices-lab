@@ -20,6 +20,7 @@ Use this if you just want every policy in `policies/` enforced on your cluster a
 2. [`setup/02-kyverno-install.md`](setup/02-kyverno-install.md) — install Kyverno
 3. [`setup/03-argocd-install.md`](setup/03-argocd-install.md) — install ArgoCD and connect this repo
 4. [`setup/04-argocd-testing.md`](setup/04-argocd-testing.md) — verify the Git → cluster sync actually works (valid push, deleted push, broken push)
+5. [`gitops-final-test/README.md`](gitops-final-test/README.md) — the final test: one pod that satisfies all 17 policies at once, one that violates them, run against the full policy stack together
 
 From then on: edit/add a file in `policies/`, `git push`, and ArgoCD applies it — no manual `kubectl apply`. See [`policies/README.md`](policies/README.md) for how that folder works.
 
