@@ -1,0 +1,39 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: generate-default-resourcequota
+spec:
+  rules:
+    - name: default-namespace-quota
+      match:
+        any:
+        - resources:
+            kinds:
+              - Namespace
+      exclude:
+        any:
+        - resources:
+            kinds:
+              - Namespace
+            names:
+              - kube-system
+              - kube-public
+              - kube-node-lease
+              - kyverno
+              - argocd
+              - local-path-storage
+              - default
+      generate:
+        apiVersion: v1
+        kind: ResourceQuota
+        name: default-quota
+        namespace: "{{request.object.metadata.name}}"
+        synchronize: true
+        data:
+          spec:
+            hard:
+              requests.cpu: "2"
+              requests.memory: 2Gi
+              limits.cpu: "4"
+              limits.memory: 4Gi
+              pods: "20"

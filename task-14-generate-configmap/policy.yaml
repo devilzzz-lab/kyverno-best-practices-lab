@@ -1,0 +1,36 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: generate-default-configmap
+spec:
+  rules:
+    - name: default-namespace-config
+      match:
+        any:
+        - resources:
+            kinds:
+              - Namespace
+      exclude:
+        any:
+        - resources:
+            kinds:
+              - Namespace
+            names:
+              - kube-system
+              - kube-public
+              - kube-node-lease
+              - kyverno
+              - argocd
+              - local-path-storage
+              - default
+      generate:
+        apiVersion: v1
+        kind: ConfigMap
+        name: namespace-defaults
+        namespace: "{{request.object.metadata.name}}"
+        synchronize: true
+        data:
+          data:
+            LOG_LEVEL: info
+            ENVIRONMENT: dev
+            CREATED_BY_POLICY: generate-default-configmap

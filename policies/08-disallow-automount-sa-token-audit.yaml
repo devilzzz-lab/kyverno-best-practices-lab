@@ -1,0 +1,18 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: disallow-automount-sa-token-audit
+spec:
+  validationFailureAction: Audit
+  rules:
+    - name: check-automount-token
+      match:
+        any:
+        - resources:
+            kinds:
+              - Pod
+      validate:
+        message: "automountServiceAccountToken should be explicitly set to false unless the pod needs to call the Kubernetes API."
+        pattern:
+          spec:
+            automountServiceAccountToken: false

@@ -1,0 +1,19 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: disallow-hostpath-audit
+spec:
+  validationFailureAction: Audit
+  rules:
+    - name: host-path
+      match:
+        any:
+        - resources:
+            kinds:
+              - Pod
+      validate:
+        message: "hostPath volumes give a pod access to the node's filesystem and should be avoided."
+        pattern:
+          spec:
+            =(volumes):
+              - X(hostPath): "null"

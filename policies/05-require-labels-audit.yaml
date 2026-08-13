@@ -1,0 +1,20 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: require-labels-audit
+spec:
+  validationFailureAction: Audit
+  rules:
+    - name: check-standard-labels
+      match:
+        any:
+        - resources:
+            kinds:
+              - Pod
+      validate:
+        message: "Pods should have 'app' and 'env' labels for governance/traceability."
+        pattern:
+          metadata:
+            labels:
+              app: "?*"
+              env: "?*"

@@ -1,0 +1,36 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: mutate-image-pull-policy
+spec:
+  rules:
+    - name: set-pull-policy-always-for-latest
+      match:
+        any:
+        - resources:
+            kinds:
+              - Pod
+      preconditions:
+        all:
+          - key: "{{ request.object.spec.containers[].image }}"
+            operator: AnyIn
+            value:
+              - "*:latest"
+      mutate:
+        patchStrategicMerge:
+          spec:
+            containers:
+              - (image): "*:latest"
+                imagePullPolicy: Always
+    - name: set-pull-policy-ifnotpresent-for-versioned
+      match:
+        any:
+        - resources:
+            kinds:
+              - Pod
+      mutate:
+        patchStrategicMerge:
+          spec:
+            containers:
+              - (image): "!*:latest"
+                +(imagePullPolicy): IfNotPresent
