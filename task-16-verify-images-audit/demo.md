@@ -18,13 +18,6 @@ kubectl get pod unsigned-pod-audit
 
 Expected: pod is created successfully despite lacking a valid signature — Audit mode only logs the violation.
 
-## Check the PolicyReport
-
-```bash
-kubectl get policyreport -A | grep -E "signed-pod-audit|unsigned-pod-audit"
-```
-
-Expected: `signed-pod-audit` → `PASS: 1`, `unsigned-pod-audit` → `FAIL: 1`.
 
 ## Cleanup
 

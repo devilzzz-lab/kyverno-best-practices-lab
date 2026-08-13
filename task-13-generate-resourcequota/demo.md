@@ -21,17 +21,32 @@ Try creating 21 tiny pods in this namespace (exceeding the `pods: 20` cap) — t
 
 ```bash
 for i in $(seq 1 21); do
-  kubectl run quota-test-$i --image=nginx:1.25 -n quota-demo-ns \
-    --requests='cpu=10m,memory=16Mi' --limits='cpu=20m,memory=32Mi' 2>&1 | tail -1
+cat <<EOF | kubectl apply -n quota-demo-ns -f -
+apiVersion: v1
+kind: Pod
+metadata:
+  name: quota-test-$i
+spec:
+  containers:
+  - name: nginx
+    image: nginx:1.25
+    resources:
+      requests:
+        cpu: 10m
+        memory: 16Mi
+      limits:
+        cpu: 20m
+        memory: 32Mi
+EOF
 done
 ```
-
-(If your `kubectl` version doesn't support `--requests`/`--limits` flags, use a small pod manifest looped instead.)
 
 Expected: the 21st pod creation fails with a quota-exceeded error.
 
 ## Cleanup
 
 ```bash
-kubectl delete namespace quota-demo-ns
+kubectl delete namespace quota-demo-ns --grace-period 0 --force
 ```
+
+
